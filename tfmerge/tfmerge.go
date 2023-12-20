@@ -56,9 +56,8 @@ func Merge(ctx context.Context, tf *tfexec.Terraform, dedupe bool, baseState []b
 			return
 		}
 		for _, res := range module.Resources {
-			// Ensure there is no resource address overlaps across all the state files
 			if !dedupe {
-				fmt.Println("boof")
+				// Ensure there is no resource address overlaps across all the state files
 				if oStateFile, ok := resmap[res.Address]; ok {
 					result = multierror.Append(result, fmt.Errorf(`resource %s is defined in both state files %s and %s`, res.Address, stateFile, oStateFile))
 					continue
@@ -81,7 +80,6 @@ func Merge(ctx context.Context, tf *tfexec.Terraform, dedupe bool, baseState []b
 			continue
 		}
 		checkConflict(stateFile, state.Values.RootModule)
-
 	}
 	if err := result.ErrorOrNil(); err != nil {
 		return nil, err

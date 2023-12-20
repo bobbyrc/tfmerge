@@ -32,7 +32,7 @@ func main() {
 			&cli.BoolFlag{
 				Name:    "dedupe",
 				EnvVars: []string{"TFMERGE_DEDUPE"},
-				Aliases: []string{"ddp"},
+				Aliases: []string{"p"},
 				Usage:   "Skip any resources that are identical between state files",
 			},
 			&cli.BoolFlag{
