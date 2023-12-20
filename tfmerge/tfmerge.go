@@ -13,7 +13,7 @@ import (
 
 // Merge merges the state files to the base state. If there is any resource address conflict, it will error.
 // baseState can be nil to indicate no base state file.
-func Merge(ctx context.Context, tf *tfexec.Terraform, baseState []byte, stateFiles ...string) ([]byte, error) {
+func Merge(ctx context.Context, tf *tfexec.Terraform, dedupe bool, baseState []byte, stateFiles ...string) ([]byte, error) {
 	if baseState == nil {
 		baseState = []byte{}
 	}
@@ -57,9 +57,11 @@ func Merge(ctx context.Context, tf *tfexec.Terraform, baseState []byte, stateFil
 		}
 		for _, res := range module.Resources {
 			// Ensure there is no resource address overlaps across all the state files
-			if oStateFile, ok := resmap[res.Address]; ok {
-				result = multierror.Append(result, fmt.Errorf(`resource %s is defined in both state files %s and %s`, res.Address, stateFile, oStateFile))
-				continue
+			if !dedupe {
+				if oStateFile, ok := resmap[res.Address]; ok {
+					result = multierror.Append(result, fmt.Errorf(`resource %s is defined in both state files %s and %s`, res.Address, stateFile, oStateFile))
+					continue
+				}
 			}
 			resmap[res.Address] = stateFile
 		}

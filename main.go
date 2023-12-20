@@ -30,6 +30,12 @@ func main() {
 				Usage:   "The output merged state file name",
 			},
 			&cli.BoolFlag{
+				Name:    "dedupe",
+				EnvVars: []string{"TFMERGE_DEDUPE"},
+				Aliases: []string{"ddp"},
+				Usage:   "Skip any resources that are identical between state files",
+			},
+			&cli.BoolFlag{
 				Name:    "debug",
 				EnvVars: []string{"TFMERGE_DEBUG"},
 				Aliases: []string{"d"},
@@ -66,7 +72,7 @@ func main() {
 				return fmt.Errorf("pulling state file of the working directory: %v", err)
 			}
 
-			b, err := tfmerge.Merge(ctx.Context, tf, []byte(baseState), ctx.Args().Slice()...)
+			b, err := tfmerge.Merge(ctx.Context, tf, ctx.Bool("dedupe"), []byte(baseState), ctx.Args().Slice()...)
 			if err != nil {
 				return err
 			}
