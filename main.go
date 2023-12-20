@@ -7,13 +7,13 @@ import (
 	"log"
 	"os"
 
+	"github.com/bobbyrc/tfmerge/tfmerge"
 	"github.com/hashicorp/go-version"
 	install "github.com/hashicorp/hc-install"
 	"github.com/hashicorp/hc-install/fs"
 	"github.com/hashicorp/hc-install/product"
 	"github.com/hashicorp/hc-install/src"
 	"github.com/hashicorp/terraform-exec/tfexec"
-	"github.com/magodo/tfmerge/tfmerge"
 	"github.com/urfave/cli/v2"
 )
 
